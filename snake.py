@@ -27,6 +27,7 @@ food_stamps = []
 
 #Set up positions (x,y) of boxes that make up the snake
 snake = turtle.clone()
+food=turtle.clone()
 snake.shape("square")
 
 #Hide the turtle object (it's an arrow - we don't need to see it)
@@ -41,6 +42,7 @@ def new_stamp():
     id1 = snake.stamp()
     #append that stamp ID to stamp_list.     
     stamp_list.append(id1)
+    
 #Draw a snake at the start of the game with a for loop
 #for loop should use range() and count up to the number of pieces
 #in the snake (i.e. START_LENGTH)
@@ -106,17 +108,22 @@ def make_food():
     #Pick a position that is a random multiple of SQUARE_SIZE
     food_x = random.randint(min_x,max_x)*SQUARE_SIZE
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+    foodcor=(food_x,food_y)
     food.goto(food_x,food_y)
-    food_pos.append(food_x,food_y)
+    food_pos.append(foodcor)
     stamp1=food.stamp()
     food_stamps.append(stamp1)
+    stamp=snake.stamp()
+    stamp_list.append(stamp)
 def move_snake():
 
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
-    
-    #If snake.direction is up, then we want the snake to change
+    for pos in pos_list:
+        if pos== my_pos and pos_list.index(pos)==0:
+            quit()
+        #If snake.direction is up, then we want the snake to change
     #it’s y position by SQUARE_SIZE
     if snake.direction == "Up":
         snake.goto(x_pos, y_pos + SQUARE_SIZE)
@@ -128,6 +135,7 @@ def move_snake():
     elif snake.direction=="Left":
         snake.goto(x_pos-SQUARE_SIZE,y_pos)
     new_stamp()
+    
     remove_tail()
      #Add new lines to the end of the function
     #Grab position of snake
@@ -162,7 +170,6 @@ def move_snake():
     turtle.ontimer(move_snake,TIME_STEP)
     if len(food_stamps)<=6:
         make_food()
-            
      
      # You should write code to check for the left, top, and bottom edges.
     #####WRITE YOUR CODE HERE
@@ -174,7 +181,6 @@ turtle.register_shape("trash.gif") #Add trash picture
                       # in the same folder as this Python script
 
 food.shape("trash.gif") 
-food = turtle.clone()
 
 #Locations of food
 food.penup()
