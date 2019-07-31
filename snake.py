@@ -1,24 +1,26 @@
 
 import turtle
 import random #We'll need this later in the lab
+turtle.write("snake game",font=("Arial", 55, "normal"))
+
+
 turtle.direction=None
 turtle.tracer(1,0) #This helps the turtle move more smoothly
-score=0
-UP_EDGE = 250
-DOWN_EDGE = -250
-RIGHT_EDGE = 400
-LEFT_EDGE = -400
+score=[]
+UP_EDGE = 500
+DOWN_EDGE = -500
+RIGHT_EDGE = 500
+LEFT_EDGE = -500
 food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
 food_stamps = []
 
-SIZE_X=800
-SIZE_Y=500
+SIZE_X=1000
+SIZE_Y=1000
 turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window  
 turtle.pensize(22)                            #size.    
 turtle.penup()
 SQUARE_SIZE = 20
 START_LENGTH = 7
-TIME_STEP = 100
 
 #Initialize lists
 div_pos=[]
@@ -31,8 +33,10 @@ food_stamps = []
 #Set up positions (x,y) of boxes that make up the snake
 divsnake=turtle.clone()
 snake = turtle.clone()
+snake.TIME_STEP = 100
+
 food=turtle.clone()
-snake.shape("square")
+snake.shape("turtle")
 snake.color("blue")
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
@@ -119,7 +123,9 @@ def make_food():
     food_stamps.append(stamp1)
     stamp=snake.stamp()
     stamp_list.append(stamp)
-
+    
+    
+    print(len(score)-7)
 def div():
     min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
     max_x=int(SIZE_X/2/SQUARE_SIZE)-1
@@ -134,6 +140,7 @@ def div():
     
     stamp2=divsnake.stamp()
     div_list.append(stamp2)
+
 def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -179,11 +186,16 @@ def move_snake():
 
     #If snake is on top of food item
     if snake.pos() in food_pos:
+        
+        score.append("g")
+        turtle.write(len(score),font=("Arial", 66, "normal"))
         food_index=food_pos.index(snake.pos()) #What does this do?
         food.clearstamp(food_stamps[food_index]) #Remove eaten food stamp
         food_pos.pop(food_index) #Remove eaten food position
         food_stamps.pop(food_index) #Remove eaten food stamp
+        snake.TIME_STEP-=10
         print("You have eaten the food!")
+        
     if snake.pos() in div_pos:
         div_index=div_pos.index(snake.pos()) #What does this do?
         divsnake.clearstamp(div_list[div_index]) #Remove eaten food stamp
@@ -194,7 +206,7 @@ def move_snake():
             stamp_list.pop()
         
 
-    turtle.ontimer(move_snake,TIME_STEP)
+    turtle.ontimer(move_snake,snake.TIME_STEP)
     turtle.ontimer(div,100000000000)
     if len(food_stamps)<=6:
         make_food()
@@ -202,7 +214,7 @@ def move_snake():
         div()
      # You should write code to check for the left, top, and bottom edges.
     #####WRITE YOUR CODE HERE
-
+    
 turtle.listen()
 turtle.register_shape("trash.gif") #Add trash picture
                       # Make sure you have downloaded this shape 
